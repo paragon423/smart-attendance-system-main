@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartTime System</title>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+<style>
+        /* 1. Global Styles */
+        body { 
+            background-color: #E6E6FA; 
+            font-family: 'Segoe UI', Roboto, sans-serif; 
+            color: #4B0082; 
+            padding-bottom: 60px; 
+        }
+
+        /* 2. Header Section */
+        .header-section { 
+            background: linear-gradient(135deg, #6A5ACD, #4B0082); 
+            color: white; 
+            padding: 50px 0; 
+            margin-bottom: 40px; 
+            border-radius: 0 0 40px 40px; 
+            box-shadow: 0 10px 25px rgba(75, 0, 130, 0.2); 
+        }
+
+        /* 3. Card & Grid Synchronization */
+        .card { 
+            border: none; 
+            border-radius: 20px; 
+            background: #ffffff; 
+            box-shadow: 0 8px 20px rgba(0,0,0,0.05); 
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .card:hover { 
+            transform: translateY(-5px); 
+            box-shadow: 0 12px 30px rgba(75, 0, 130, 0.15); 
+        }
+
+        .section-title {
+            font-weight: 700;
+            color: #4B0082;
+            border-left: 5px solid #8A2BE2;
+            padding-left: 15px;
+            margin-bottom: 25px;
+        }
+
+        /* 4. Buttons */
+        .btn {
+            border-radius: 12px;
+            font-weight: 600;
+            transition: 0.3s;
+            border: none;
+            padding: 10px 20px;
+        }
+        
+        .btn-enroll { background-color: #8A2BE2; color: white; }
+        .btn-photo { background-color: #00BFFF; color: white; }
+        .btn-video { background-color: #FF4500; color: white; }
+        .btn-live { background-color: #32CD32; color: white; }
+        .btn-export { background-color: #4B0082; color: white; }
+
+        .btn:hover { transform: scale(1.05); filter: brightness(1.1); color: white; }
+
+        /* 5. Inputs */
+        .form-control {
+            border-radius: 10px;
+            border: 1.5px solid #E6E6FA;
+            padding: 10px;
+        }
+
+        .form-control:focus {
+            border-color: #8A2BE2;
+            box-shadow: 0 0 0 0.2rem rgba(138, 43, 226, 0.25);
+        }
+
+        /* 6. Special UI Elements */
+        .result-box { 
+            display: none; 
+            margin-top: 40px; 
+            padding: 30px; 
+            border-left: 10px solid #6A5ACD; 
+        }
+
+        .chart-container { width: 220px; margin: 0 auto; }
+
+        .present-tag { background: #E8F5E9; color: #2E7D32; padding: 8px 15px; border-radius: 10px; display: inline-block; width: 100%; }
+        .absent-tag { background: #FFEBEE; color: #C62828; padding: 8px 15px; border-radius: 10px; display: inline-block; width: 100%; }
+
+        #liveOverlay { 
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: rgba(0,0,0,0.95); z-index: 9999; color: white; text-align: center;
+        }
+
+        /* Smooth Live Overlay */
+        #liveOverlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.95);
+    z-index: 10000;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center; 
+}
+    /* This container ensures the canvas and video are the exact same size */
+.video-wrapper {
+    position: relative;
+    width: 90vw;       /* Large display for crowds */
+    max-width: 1100px; 
+    aspect-ratio: 16 / 9; /* Matches the 1280x720 stream */
+    background: #000;
+    border: 4px solid #8A2BE2;
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+#liveStream {
+    border: 5px solid #8A2BE2;
+    border-radius: 15px;
+    max-width: 90%;
+    max-height: 70vh;
+    box-shadow: 0 0 50px rgba(138, 43, 226, 0.5);
+}
+
+.live-controls {
+    margin-top: 20px;
+    text-align: center;
+    color: white;
+}
+    #overlayCanvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;      /* Stretches to match the wrapper */
+    height: 100%;     /* Stretches to match the wrapper */
+    pointer-events: none;
+    z-index: 10001;   /* Forces it above the video */
+}
+
+   #liveVideo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+        
+
+    </style>
+</head>
+<body>
+
+<header class="header-section text-center">
+    <h1 class="display-4 fw-bold">SmartTime</h1>
+    <p class="lead">Face Recognition Powered by AMINU ABDULLAHI</p>
+</header>
+
+<div class="container">
+    <div class="card p-4 mb-5">
+        <h3 class="mb-4">Biometric Enrollment</h3>
+        <p class="text-muted">Enter details and capture your face live.</p>
+        <div class="row g-3">
+            <div class="col-md-4">
+                <input type="text" id="enroll_roll" class="form-control" placeholder="ID Number" required>
+            </div>
+            <div class="col-md-4">
+                <input type="text" id="enroll_bs" class="form-control" placeholder="Department" required>
+            </div>
+            <div class="col-md-4">
+                <button type="button" class="btn btn-enroll w-100 fw-bold py-2" data-bs-toggle="modal" data-bs-target="#cameraModal" onclick="startEnrollCamera()">
+                    OPEN CAMERA
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="card p-4 mb-5" style="border-left: 10px solid #8A2BE2;">
+    <div class="d-flex justify-content-between align-items-center">
+        <div>
+            <h3 class="mb-1">Attendance Records</h3>
+            <p class="text-muted mb-0">View attendance history</p>
+        </div>
+        <div>
+            <a href="/history" class="btn btn-enroll px-5 fw-bold py-2">
+                📊 VIEW HISTORY
+            </a>
+        </div>
+    </div>
+</div>
+
+    <div>
+        <h3 class="mb-4">Take Attendance</h3>
+    </div>
+
+        <div class="col-md-4 text-center">
+            <div class="card p-4 h-100">
+                <h5 class="fw-bold">Live Detection</h5>
+                <p class="small text-muted">Real-time attendance.</p>
+                <button type="button" onclick="startLive()" class="btn btn-live w-100 fw-bold mt-auto py-2">START LIVE</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="resultBox" class="result-box card">
+        <h4 class="text-center fw-bold border-bottom pb-2">Attendance Summary</h4>
+        
+        <div class="chart-container mt-3">
+            <canvas id="attendanceChart"></canvas>
+        </div>
+
+        <div class="row mt-4 text-center">
+            <div class="col-md-6 border-end">
+                <h5 class="present-tag">Present: <span id="pCount">0</span></h5>
+                <div id="pList" class="mt-2 small text-muted"></div>
+            </div>
+            <div class="col-md-6">
+                <h5 class="absent-tag">Absent: <span id="aCount">0</span></h5>
+                <div id="aList" class="mt-2 small text-muted"></div>
+            </div>
+        </div>
+        
+        <div class="text-center mt-3">
+            <button type="button" onclick="downloadCSV()" class="btn btn-export fw-bold px-5 py-2">
+                DOWNLOAD ATTENDANCE REPORT (.CSV)
+            </button>
+        </div>
+    </div>
+</div>
+
+<div id="liveOverlay">
+    <img id="liveStream" src="">
+    <div class="live-controls">
+        <h3>Live Session Active</h3>
+        <p>Scanning for registered faces...</p>
+        <button onclick="stopLiveSession()" class="btn btn-danger btn-lg px-5 fw-bold">STOP & FINISH</button>
+    </div>
+</div>
+
+<div class="modal fade" id="cameraModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content" style="border-radius: 20px;">
+            <div class="modal-header border-0">
+                <h5 class="modal-title">Face Enrollment</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="stopCamera()"></button>
+            </div>
+            <div class="modal-body text-center">
+                <video id="video" autoplay playsinline></video>
+                <canvas id="canvas" width="640" height="480" style="display:none;"></canvas>
+                <div class="mt-4">
+                    <button id="captureBtn" class="btn btn-success btn-lg px-5 fw-bold" onclick="captureAndEnroll()">CAPTURE FACE</button>
+                </div>
+                <p id="statusMsg" class="mt-3 fw-bold"></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let stream;
+    let attendanceChartInstance = null;
+    let currentLiveBS = "";
+    let liveInterval;
+    let lastResults = [];
+
+    async function startEnrollCamera() {
+        const video = document.getElementById('video');
+        try {
+            stream = await navigator.mediaDevices.getUserMedia({ video: true });
+            video.srcObject = stream;
+        } catch (err) { alert("Webcam access denied."); }
+    }
+
+    function stopCamera() { if (stream) stream.getTracks().forEach(t => t.stop()); }
+
+    async function captureAndEnroll() {
+        const roll = document.getElementById('enroll_roll').value;
+        const bs = document.getElementById('enroll_bs').value;
+        const status = document.getElementById('statusMsg');
+        if (!roll || !bs) { alert("Enter Staff ID and Department Section!"); return; }
+
+        const canvas = document.getElementById('canvas');
+        const video = document.getElementById('video');
+        canvas.getContext('2d').drawImage(video, 0, 0, 640, 480);
+        const dataURL = canvas.toDataURL('image/jpeg');
+
+        status.innerText = "Extracting Face Data...";
+        try {
+            const res = await fetch('/enroll_capture', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ roll_no: roll, department_section: bs, image: dataURL })
+            });
+            const result = await res.json();
+            if (result.success) {
+                status.innerHTML = "<span style='color:green'>Enrollment Complete!</span>";
+                setTimeout(() => location.reload(), 1500);
+            } else { status.innerHTML = `<span style='color:red'>${result.error}</span>`; }
+        } catch (e) { status.innerText = "Server Error."; }
+    }
+
+    // --- IMPROVED LIVE SESSION FUNCTIONS ---
+   async function startLive() {
+    currentLiveBS = prompt("Enter Department Section:");
+    if (!currentLiveBS) return;
+
+    await fetch(`/start_live_session/${currentLiveBS}`);
+
+    const overlay = document.getElementById('liveOverlay');
+    overlay.style.display = 'flex';
+    
+    overlay.innerHTML = `
+        <div class="video-wrapper" style="position: relative; width: 90vw; max-width: 1100px; margin: auto;">
+            <video id="liveVideo" autoplay playsinline style="width: 100%; height: auto; display: block;"></video>
+            <canvas id="overlayCanvas" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 10001; pointer-events: none;"></canvas>
+        </div>
+        <div class="live-controls" style="color: white; margin-top: 20px;">
+            <h3>Scanning: ${currentLiveBS}</h3>
+            <button onclick="stopLiveSession()" class="btn btn-danger btn-lg">STOP & SAVE</button>
+        </div>
+    `;
+
+    const video = document.getElementById('liveVideo');
+    const canvas = document.getElementById('overlayCanvas');
+
+    try {
+        const stream = await navigator.mediaDevices.getUserMedia({ 
+            video: { width: { ideal: 1280 }, height: { ideal: 720 } } 
+        });
+        video.srcObject = stream;
+
+        // CRITICAL: Wait for the video to actually start playing
+        video.onloadeddata = () => {
+            console.log("Video dimensions:", video.videoWidth, "x", video.videoHeight);
+            
+            // Set internal drawing resolution to match the video feed
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+
+            // TEST DRAW: If you don't see a purple box now, the canvas is hidden/broken
+            const ctx = canvas.getContext('2d');
+            ctx.strokeStyle = "purple";
+            ctx.lineWidth = 10;
+            ctx.strokeRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "purple";
+            ctx.font = "30px Arial";
+            ctx.fillText("CANVAS ACTIVE - SCANNING...", 50, 50);
+
+            liveInterval = setInterval(() => {
+                captureAndAnalyze(video, canvas);
+            }, 400); // Slower interval to prevent network congestion
+        };
+    } catch (err) {
+        alert("Camera error: " + err);
+    }
+}
+async function captureAndAnalyze(video, canvas) {
+    const tmpCanvas = document.createElement('canvas');
+    tmpCanvas.width = 640;
+    tmpCanvas.height = 480;
+    const tmpCtx = tmpCanvas.getContext('2d');
+    tmpCtx.drawImage(video, 0, 0, 640, 480);
+    
+    const dataURL = tmpCanvas.toDataURL('image/jpeg', 0.5);
+
+    try {
+        const res = await fetch('/analyze_frame', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ department_section: currentLiveBS, image: dataURL })
+        });
+        
+        const data = await res.json();
+        if (data.success) {
+            lastResults = data.results;
+            renderBoxes(canvas.getContext('2d'), canvas);
+        }
+    } catch (e) {
+        console.error("Worker Busy...");
+    }
+}
+
+function renderBoxes(ctx, canvas) {
+    // 1. Clear everything
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    // 2. Redraw the "System Active" border so we know the canvas is alive
+    ctx.strokeStyle = "rgba(138, 43, 226, 0.5)";
+    ctx.lineWidth = 2;
+    ctx.strokeRect(0, 0, canvas.width, canvas.height);
+
+    // 3. Draw the faces
+    // Scale assumes AI processed a 640x480 frame
+    const scaleX = canvas.width / 640;
+    const scaleY = canvas.height / 480;
+
+    if (lastResults.length === 0) return;
+
+    lastResults.forEach(person => {
+        const x1 = person.bbox[0] * scaleX;
+        const y1 = person.bbox[1] * scaleY;
+        const x2 = person.bbox[2] * scaleX;
+        const y2 = person.bbox[3] * scaleY;
+        
+        const color = person.name === "Unknown" ? "#FF0000" : "#00FF00";
+        
+        // Draw Rectangle
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 5;
+        ctx.strokeRect(x1, y1, x2 - x1, y2 - y1);
+
+        // Draw Label
+        ctx.fillStyle = color;
+        ctx.font = "bold 20px Arial";
+        ctx.fillText(person.name, x1, y1 > 25 ? y1 - 10 : y1 + 25);
+    });
+}
+
+async function stopLiveSession() {
+    // 1. Stop the loop and the camera
+    clearInterval(liveInterval);
+    const video = document.getElementById('liveVideo');
+    if (video && video.srcObject) {
+        video.srcObject.getTracks().forEach(track => track.stop());
+    }
+
+    // 2. Hide the overlay
+    document.getElementById('liveOverlay').style.display = 'none';
+
+    // 3. Fetch final attendance from Server
+    const res = await fetch(`/stop_live_session/${currentLiveBS}`);
+    const data = await res.json();
+
+    // 4. Update the Result Box (The one at the bottom of your page)
+    const resultBox = document.getElementById('resultBox');
+    resultBox.style.display = "block"; 
+    
+    document.getElementById('pCount').innerText = data.present_count;
+    document.getElementById('pList').innerText = data.present_list.length > 0 ? data.present_list.join(', ') : "None";
+    document.getElementById('aCount').innerText = data.absent_count;
+    document.getElementById('aList').innerText = data.absent_list.length > 0 ? data.absent_list.join(', ') : "None";
+    
+    // 5. Update the Chart
+    updatePieChart(data.present_count, data.absent_count);
+    
+    // 6. Scroll to results
+    window.scrollTo({ top: resultBox.offsetTop - 20, behavior: 'smooth' });
+}
+    async function handleUpload(url, bsId, fileId, btnSelector, fileKey) {
+    const bs = document.getElementById(bsId).value;
+    const fileInput = document.getElementById(fileId);
+    const file = fileInput.files[0];
+    const resultBox = document.getElementById('resultBox');
+    const btn = document.querySelector(btnSelector);
+
+    if (!bs || !file) { 
+        alert("Please provide Section and File!"); 
+        return; 
+    }
+
+    const formData = new FormData();
+    formData.append('department_section', bs);
+    formData.append(fileKey, file);
+
+    const originalText = btn.innerText;
+    btn.innerText = "Analyzing Crowd Scene...";
+    btn.disabled = true;
+
+    try {
+        const res = await fetch(url, { method: 'POST', body: formData });
+        
+        if (!res.ok) {
+            const errorData = await res.json();
+            throw new Error(errorData.error || "Server Error");
+        }
+
+        const data = await res.json();
+        
+        // Force display the box
+        resultBox.style.display = "block"; 
+        
+        // Update UI Text
+        document.getElementById('pCount').innerText = data.present_count;
+        document.getElementById('pList').innerText = data.present_list.length > 0 ? data.present_list.join(', ') : "None";
+        document.getElementById('aCount').innerText = data.absent_count;
+        document.getElementById('aList').innerText = data.absent_list.length > 0 ? data.absent_list.join(', ') : "None";
+        
+        // Trigger Chart
+        updatePieChart(data.present_count, data.absent_count);
+        
+        // Smooth Scroll
+        window.scrollTo({
+            top: resultBox.offsetTop - 20,
+            behavior: 'smooth'
+        });
+
+    } catch (e) { 
+        console.error(e);
+        alert("Error: " + e.message); 
+    } finally { 
+        btn.innerText = originalText; 
+        btn.disabled = false; 
+    }
+}
+
+    function updatePieChart(present, absent) {
+        const ctx = document.getElementById('attendanceChart').getContext('2d');
+        if (attendanceChartInstance) { attendanceChartInstance.destroy(); }
+        attendanceChartInstance = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['Present', 'Absent'],
+                datasets: [{
+                    data: [present, absent],
+                    backgroundColor: ['#2E7D32', '#C62828'],
+                    hoverOffset: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: { legend: { position: 'bottom' } }
+            }
+        });
+    }
+
+    function uploadPhoto() { handleUpload('/process_photo', 'photo_bs', 'class_photo', '.btn-photo', 'class_photo'); }
+    function uploadVideo() { handleUpload('/process_video', 'video_bs', 'class_video', '.btn-video', 'class_video'); }
+
+    async function downloadCSV() {
+        const pList = document.getElementById('pList').innerText.split(', ');
+        const aList = document.getElementById('aList').innerText.split(', ');
+        const bs = currentLiveBS || document.getElementById('photo_bs').value || "Report";
+
+        const res = await fetch('/export_attendance', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ department_section: bs, present_list: pList, absent_list: aList })
+        });
+
+        if (res.ok) {
+            const blob = await res.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `Attendance_${bs}.csv`;
+            a.click();
+        }
+    }
+</script>
+</body>
+</html>
