@@ -1,300 +1,36 @@
+# SmartTime — SQLite-backed staff attendance and IT admin console
 
+- `index.html` is the staff attendance home page.
+- `admin.html` is the IT administrator console. Its dashboard is hidden until the admin login succeeds and hidden again after sign-out.
+- `server.py` serves the pages and the `/api/db` endpoints.
+- `smarttime.sqlite3` is created automatically in this folder when the server first starts. Users, attendance records, and workplace settings are stored in SQLite tables; browser `localStorage` is no longer used.
 
-# Smart Attendance System
+## Start SmartTime
 
-> An AI-powered biometric attendance system that uses deep-learning-based face detection and recognition to automate real-time attendance management.
+Requires Python 3.9+; no third-party Python packages are required.
 
-## 📌 Overview
+1. Extract the ZIP file.
+2. Open a terminal in the `SmartTime_separated` folder.
+3. Run:
 
-The **Smart Attendance System** is a web-based application designed to automate attendance using facial recognition.
+   ```bash
+   python server.py
+   ```
 
-The system captures faces through a camera, detects and recognizes registered individuals using **InsightFace**, and automatically records their attendance in a **SQLite database**.
+4. Open `http://localhost:8000/` for staff attendance.
+5. Open `http://localhost:8000/admin.html` for the IT console. Demo credentials: **Admin User** / **demo123**.
+6. In **Workplace Settings**, configure the actual latitude, longitude and allowed radius in metres. Staff devices must allow location access. For deployment on other devices, host this app behind HTTPS.
 
-It provides a simple dashboard for real-time attendance monitoring and viewing attendance history.
+Keep `server.py` running while using the system. Back up `smarttime.sqlite3` to back up the stored records and settings.
 
----
+## Responsive layout and GPS geofencing notes
 
-## 🚀 Features
+- The staff page and admin console adapt to phone, tablet, and desktop widths. On phones/tablets, the admin sidebar opens from the menu button and closes after a page is selected or the backdrop is tapped.
+- Workplace coordinates must be decimal degrees: latitude first (−90 to 90), longitude second (−180 to 180). Do not swap the two values. Copy coordinates for the actual building/entrance from a reliable map source; use the same datum (WGS84, used by GPS).
+- Geolocation requests a fresh, high-accuracy device fix. The UI reports the estimated distance and the GPS uncertainty in metres. If the GPS uncertainty is very large, staff are asked to improve the fix rather than receiving a misleading distance result.
+- To reduce false rejections near the boundary, access is accepted when the GPS uncertainty circle overlaps the configured radius (`estimated distance − reported accuracy <= radius`). This is intentionally more tolerant at the edge; use a sensible radius and server-side verification for production.
+- Browser geolocation requires HTTPS on deployed sites (or localhost during local testing). Staff should grant location permission and enable precise location/GPS in their device settings. Indoor GPS can be inaccurate; test near a window or outdoors when setting up the workplace coordinates.
 
-* Real-time face detection and recognition
-* Multi-face detection
-* Automatic attendance marking
-* Face enrollment for registered users
-* Attendance history and records
-* Web-based interface
-* SQLite database integration
-* Deep-learning-based face recognition
-* Lightweight and easy to deploy
+## Important prototype/security note
 
----
-
-## 🧠 AI Model
-
-The system uses the **InsightFace** framework with the `buffalo_s` model pack.
-
-### Face Detection
-
-**SCRFD (Sample and Computation Redistribution for Efficient Face Detection)** is used to efficiently detect faces in images and video frames.
-
-### Face Recognition
-
-**MobileFaceNet** is used to generate facial feature embeddings for identifying registered individuals.
-
-### Recognition Pipeline
-
-```
-Camera / Image
-      ↓
-Face Detection
-      ↓
-Face Alignment
-      ↓
-Feature Extraction
-      ↓
-Face Embedding
-      ↓
-Identity Matching
-      ↓
-Attendance Recording
-      ↓
-SQLite Database
-```
-
----
-
-## 🏗️ System Architecture
-
-```
-┌─────────────────────┐
-│   Camera / User     │
-└──────────┬──────────┘
-           ↓
-┌─────────────────────┐
-│ Frontend Interface  │
-│ HTML / CSS / JS     │
-└──────────┬──────────┘
-           ↓
-┌─────────────────────┐
-│    Flask Backend    │
-└──────────┬──────────┘
-           ↓
-┌─────────────────────┐
-│    InsightFace      │
-│ SCRFD + MobileFaceNet│
-└──────────┬──────────┘
-           ↓
-┌─────────────────────┐
-│ Attendance System   │
-└──────────┬──────────┘
-           ↓
-┌─────────────────────┐
-│   SQLite Database   │
-└─────────────────────┘
-```
-
----
-
-## 🛠️ Technology Stack
-
-| Category             | Technology            |
-| -------------------- | --------------------- |
-| Programming Language | Python                |
-| Backend              | Flask                 |
-| Computer Vision      | OpenCV                |
-| Face Detection       | SCRFD                 |
-| Face Recognition     | MobileFaceNet         |
-| AI Framework         | InsightFace           |
-| Database             | SQLite                |
-| Frontend             | HTML, CSS, JavaScript |
-| Version Control      | Git & GitHub          |
-
----
-
-## 📁 Project Structure
-
-```
-smart-attendance-system/
-│
-├── backend/
-│   ├── main.py
-│   ├── data.py
-│   │
-│   ├── templates/
-│   │   ├── index.html
-│   │   └── history.html
-│   │
-│   └── database/
-│
-├── .gitignore
-├── README.md
-└── requirements.txt
-```
-
-> Database files and biometric enrollment data are excluded from GitHub for privacy and security.
-
----
-
-## ⚙️ Installation
-
-### 1. Clone the repository
-
-```
-git clone https://github.com/24A31A4209/smart-attendance-system.git
-cd smart-attendance-system
-```
-
-### 2. Create a virtual environment
-
-```
-python -m venv venv
-```
-
-Activate it on Windows:
-
-```
-venv\Scripts\activate
-```
-
-### 3. Install dependencies
-
-```
-pip install -r requirements.txt
-```
-
-### 4. Run the application
-
-```
-python backend/main.py
-```
-
-Open the application in your browser:
-
-```
-http://127.0.0.1:5000
-```
-
----
-
-## 🔄 How It Works
-
-1. A user is enrolled into the system.
-2. The system detects the user's face.
-3. Facial features are extracted using the recognition model.
-4. The generated embedding is compared with enrolled identities.
-5. The system identifies the person.
-6. Attendance is automatically recorded.
-7. Attendance records can be viewed through the web dashboard.
-
----
-
-## 🔐 Privacy & Security
-
-Since the system works with biometric information:
-
-* Face enrollment data should be stored securely.
-* Database files are excluded from version control.
-* Biometric information should not be publicly shared.
-* Access to attendance records should be restricted.
-* Production deployments should implement proper authentication and authorization.
-
----
-
-## 🔮 Future Enhancements
-
-* Face liveness detection
-* Anti-spoofing protection
-* Improved recognition under different lighting conditions
-* Attendance analytics and reports
-* Student and faculty dashboards
-* Email/SMS notifications
-* Cloud deployment
-* Mobile application
-* Role-based authentication
-
----
-
-## 👥 Team
-
-### Guru Tulasi Hima Bindu
-
-**Project Lead & AI Integration**
-
-* AI model integration
-* Face recognition pipeline
-* System architecture
-* Backend integration
-
-GitHub: [@24A31A4209](https://github.com/24A31A4209)
-
-### Piradi Sai Rupa Sri
-
-**Backend & Database Management**
-
-* Flask backend
-* API development
-* SQLite database
-* Attendance management
-
-GitHub: [@24A31A4227](https://github.com/24A31A4227)
-
-### Jampa Siri Chandana Priya
-
-**UI/UX & Frontend Development**
-
-* Frontend interface
-* HTML/CSS
-* JavaScript
-* User experience
-
-GitHub: [@24A31A4210](https://github.com/24A31A4210)
-
-### Chitturi Dhanu Sree
-
-**Data Engineering & Testing**
-
-* Dataset preparation
-* Face enrollment testing
-* Recognition testing
-* Performance evaluation
-
-GitHub: [@24A31A4207](https://github.com/24A31A4207)
-
-### Chikkala Mary Blessica
-
-**Documentation & Deployment**
-
-* Technical documentation
-* Requirement analysis
-* Environment configuration
-* Deployment support
-
-GitHub: [@24A31A4206](https://github.com/24A31A4206)
-
----
-
-## 📚 Technologies & References
-
-This project makes use of the following open-source technologies:
-
-* InsightFace
-* OpenCV
-* Flask
-* SQLite
-* SCRFD
-* MobileFaceNet
-
----
-
-## ⚠️ Disclaimer
-
-This project is developed primarily for **academic, educational, and research purposes**.
-
-The system should be properly validated for accuracy, security, privacy, and reliability before being used in real-world biometric attendance environments.
-
----
-
-## ⭐ Support
-
-If you find this project useful, consider giving the repository a ⭐ on GitHub.
-
-**Built with Python, Computer Vision, Deep Learning, and Flask.**
+This is a local demonstration, not a production-ready attendance system. The demo administrator password is not secure server-side authentication, and the API currently accepts state updates from clients. Do not expose it to the public internet or use it for real employee records until server-side authentication/authorization, audit logging, and server-verified geofencing are implemented. Browser location checks alone can be spoofed. Camera capture, QR token entry and fingerprint options are still demonstration flows rather than production-grade identity verification.

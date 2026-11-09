@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SmartTime Admin | MADA Multi-Links Co LTD</title>
+<style>
+:root{--navy:#142b4a;--blue:#2463eb;--teal:#0f9d8a;--bg:#f4f7fb;--ink:#182230;--muted:#65758b;--line:#e4eaf2;--white:#fff;--red:#c53b4a;--amber:#b7791f}
+*{box-sizing:border-box}.shell{visibility:hidden}body.authenticated .shell{visibility:visible}body{margin:0;font:15px/1.45 Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial;color:var(--ink);background:var(--bg)}
+button,input,select{font:inherit}button{cursor:pointer;border:0;border-radius:10px;padding:10px 14px;background:var(--blue);color:white;font-weight:650}button.secondary{background:#eaf0ff;color:#204fc0}button.ghost{background:#f1f4f8;color:#34445a}button.danger{background:#fff0f0;color:#a52635}button:disabled{opacity:.5;cursor:not-allowed}
+.shell{display:grid;grid-template-columns:240px 1fr;min-height:100vh}.sidebar{background:var(--navy);color:#fff;padding:24px 16px;display:flex;flex-direction:column;gap:22px}.brand{display:flex;align-items:center;gap:12px;padding:0 8px}.logo{width:42px;height:42px;border-radius:13px;background:linear-gradient(135deg,#5eead4,#60a5fa);display:grid;place-items:center;color:#112846;font-weight:900;font-size:21px}.brand h1{font-size:20px;margin:0}.brand small{display:block;color:#b9c9dc;font-size:11px;letter-spacing:.05em}.nav{display:grid;gap:6px}.nav button{background:transparent;color:#c6d5e8;text-align:left;font-weight:550}.nav button.active,.nav button:hover{background:#254366;color:white}.sidebar .foot{margin-top:auto;color:#9eb2ca;font-size:12px;padding:8px}
+main{min-width:0}.topbar{display:flex;align-items:center;justify-content:space-between;padding:22px 30px;background:#fff;border-bottom:1px solid var(--line);gap:12px}.topbar h2{margin:0;font-size:22px}.topbar p{margin:3px 0 0;color:var(--muted);font-size:13px}.userchip{display:flex;align-items:center;gap:10px}.avatar{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;background:#e0eaff;color:#1c4fc1;font-weight:800}.content{padding:26px 30px;max-width:1500px;margin:auto}.page{display:none}.page.active{display:block}.welcome{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:22px}.welcome h3{margin:0;font-size:25px}.muted{color:var(--muted)}.grid{display:grid;gap:16px}.stats{grid-template-columns:repeat(4,minmax(0,1fr));margin-bottom:20px}.card{background:white;border:1px solid var(--line);border-radius:16px;padding:20px;box-shadow:0 4px 16px #162e4a05}.stat-label{color:var(--muted);font-size:13px}.stat-num{font-size:29px;font-weight:800;margin:6px 0}.stat-foot{font-size:12px;color:var(--teal)}.two{grid-template-columns:1.3fr 1fr}.card h3{font-size:16px;margin:0 0 16px}.attendance-actions{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.action{padding:16px;border:1px solid var(--line);border-radius:14px;background:#fbfcff;color:var(--ink);text-align:left}.action strong{display:block;margin:9px 0 3px}.action span{color:var(--muted);font-size:12px}.action .ico{font-size:23px}.notice{border-radius:10px;padding:12px 14px;margin:12px 0;font-size:13px}.notice.info{background:#edf5ff;color:#2453a6}.notice.warn{background:#fff7e6;color:#8b5b08}.notice.error{background:#fff0f0;color:#a52635}.notice.ok{background:#e8faf4;color:#08775f}.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:16px}.toolbar input,.toolbar select,.field input,.field select{border:1px solid #d8e0eb;border-radius:9px;padding:10px 12px;background:white;color:var(--ink)}.toolbar input{min-width:180px}.tablewrap{overflow:auto}table{width:100%;border-collapse:collapse;white-space:nowrap}th,td{text-align:left;padding:12px 10px;border-bottom:1px solid #edf0f5;font-size:13px}th{color:var(--muted);font-weight:650;background:#fbfcfe}tbody tr:last-child td{border-bottom:0}.pill{display:inline-block;padding:4px 8px;border-radius:99px;font-size:11px;font-weight:750}.pill.present{background:#e5f8ef;color:#08775f}.pill.late{background:#fff2d8;color:#96620b}.pill.absent{background:#ffe8e8;color:#b12c3a}.pill.pending{background:#eaf0ff;color:#3159b8}.barlist{display:grid;gap:15px}.barrow{display:grid;grid-template-columns:90px 1fr 35px;gap:10px;align-items:center;font-size:13px}.bar{height:9px;border-radius:9px;background:#edf1f7;overflow:hidden}.bar i{height:100%;display:block;border-radius:9px;background:linear-gradient(90deg,#2463eb,#20b7a0)}.field{display:grid;gap:6px;margin-bottom:13px}.field label{font-size:13px;color:var(--muted);font-weight:600}.field input,.field select{width:100%}.modalback{display:none;position:fixed;inset:0;background:#0b1b30a6;z-index:10;align-items:center;justify-content:center;padding:16px}.modalback.open{display:flex}.modal{width:min(560px,100%);max-height:90vh;overflow:auto;background:white;border-radius:18px;padding:24px}.modalhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}.modalhead h3{margin:0}.modalhead button{padding:5px 10px}.video{width:100%;max-height:300px;background:#0d1726;border-radius:12px;object-fit:cover}.small{font-size:12px}.empty{text-align:center;color:var(--muted);padding:24px}.chart{height:190px;display:flex;align-items:end;gap:12px;padding:12px 5px 0;border-bottom:1px solid var(--line)}.chartcol{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:end;height:100%;gap:7px;font-size:11px;color:var(--muted)}.chartcol i{width:min(38px,70%);border-radius:7px 7px 0 0;background:linear-gradient(180deg,#3b82f6,#12b8a6);min-height:4px}.chartcol b{font-size:11px;color:var(--ink)}.mobilemenu{display:none}
+@media(max-width:950px){.shell{grid-template-columns:minmax(0,1fr)}.sidebar{display:flex;position:fixed;inset:0 auto 0 0;width:min(290px,86vw);height:100dvh;overflow-y:auto;z-index:30;transform:translateX(-105%);transition:transform .22s ease;box-shadow:12px 0 35px #10243b30}.sidebar.open{transform:translateX(0)}.sidebar-backdrop{display:none;position:fixed;inset:0;background:#08162980;z-index:29}.sidebar-backdrop.open{display:block}.topbar{padding:14px 16px;position:sticky;top:0;z-index:15}.content{padding:18px}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.two{grid-template-columns:1fr}.mobilemenu{display:inline-block;width:auto;min-width:42px;padding:9px 12px}.attendance-actions{grid-template-columns:repeat(2,minmax(0,1fr))}.welcome{align-items:flex-start;flex-direction:column}}
+@media(max-width:520px){.stats{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.stat-num{font-size:22px}.topbar h2{font-size:17px}.topbar p{font-size:11px}.userchip .who{display:none}.card{padding:14px}.content{padding:12px}.attendance-actions{grid-template-columns:1fr}.toolbar>*{min-width:0;max-width:100%;width:100%}.barrow{grid-template-columns:70px minmax(0,1fr) 28px;gap:7px}.modal{padding:17px}.welcome h3{font-size:21px}}
+@media(min-width:951px){.sidebar{position:sticky;top:0;height:100vh;align-self:start}.sidebar-backdrop{display:none!important}}
+.sidebar-backdrop{cursor:pointer}
+</style>
+</head>
+<body>
+<div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+<div class="shell">
+<aside class="sidebar" id="sidebar">
+  <div class="brand"><div class="logo">ST</div><div><h1>SmartTime</h1><small>MADA MULTI-LINKS CO LTD</small></div></div>
+  <nav class="nav" id="nav">
+    <button class="active" data-page="staff">◷ &nbsp; Staff Attendance</button>
+    <button data-page="dashboard" class="admin-only">▦ &nbsp; IT Dashboard</button>
+    <button data-page="attendance" class="admin-only">◷ &nbsp; Attendance Tools</button>
+    <button data-page="records" class="admin-only">▤ &nbsp; Attendance Records</button>
+    <button data-page="analytics" class="admin-only">▥ &nbsp; Analytics & Reports</button>
+    <button data-page="users" class="admin-only">♙ &nbsp; User Management</button>
+    <button data-page="settings" class="admin-only">⚙ &nbsp; Workplace Settings</button>
+  </nav>
+  <div class="foot">Admin console · <a href="index.html" style="color:#d8e5f5">Staff home</a><br>Version 0.2 · Prototype</div>
+</aside>
+<main>
+<header class="topbar">
+  <div style="display:flex;align-items:center;gap:12px"><button class="mobilemenu ghost" id="menuBtn">☰</button><div><h2 id="pageTitle">Dashboard</h2><p id="todayLine">Welcome to SmartTime</p></div></div>
+  <div class="userchip"><div class="avatar" id="avatar">AA</div><div class="who"><strong id="displayName">Admin User</strong><div class="muted small" id="displayRole">Administrator</div></div><button class="ghost" id="logoutBtn">Sign out</button></div>
+</header>
+<div class="content">
+
+<section class="page active" id="page-staff">
+ <div style="max-width:620px;margin:4vh auto"><div class="card" style="padding:clamp(22px,5vw,42px)">
+  <div style="display:flex;align-items:center;gap:14px;margin-bottom:24px"><div class="logo">ST</div><div><h2 style="margin:0;font-size:26px">SmartTime</h2><div class="muted">MADA Multi-Links Co LTD</div></div></div>
+  <div id="staffStepId"><h3 style="font-size:22px;margin-bottom:6px">Staff attendance</h3><p class="muted">Enter your employee ID to continue.</p>
+   <div class="field"><label for="staffIdInput">Employee ID number</label><input id="staffIdInput" placeholder="Enter your staff ID" autocomplete="username"></div>
+   <div id="staffLoginNotice" class="notice info">Your location is checked automatically before attendance options appear.</div><button id="staffContinue" style="width:100%">Sign in</button>
+  </div>
+  <div id="staffStepMethods" style="display:none"><h3 style="font-size:22px;margin-bottom:6px">Register your attendance</h3><p class="muted" id="staffWelcome">Choose a method to register attendance.</p>
+   <div class="attendance-actions" style="grid-template-columns:1fr">
+    <button class="action" data-method="Face recognition"><span class="ico">▣</span><strong>Use face recognition</strong><span>Verify with the device camera</span></button>
+    <button class="action" data-method="QR code"><span class="ico">▦</span><strong>Scan QR code on my badge</strong><span>Use the QR code assigned to your badge</span></button>
+    <button class="action" data-method="Fingerprint"><span class="ico">◎</span><strong>Use fingerprint</strong><span>Requires a compatible fingerprint reader</span></button>
+   </div><div id="staffMethodNotice" class="notice info">Workplace location is an access rule, not an attendance method.</div><button class="ghost" id="staffBack" style="width:100%">Back to ID entry</button>
+  </div><p class="muted small" style="margin-top:22px">Attendance access is allowed only inside the configured workplace area.</p>
+ </div></div>
+</section>
+<section class="page active" id="page-dashboard">
+  <div class="welcome"><div><h3 id="hello">Good afternoon 👋</h3><div class="muted">Here is your attendance overview for today.</div></div><button id="quickCheckin">＋ Check in</button></div>
+  <div class="grid stats">
+    <div class="card"><div class="stat-label">Present today</div><div class="stat-num" id="statPresent">0</div><div class="stat-foot">Recorded check-ins</div></div>
+    <div class="card"><div class="stat-label">Late arrivals</div><div class="stat-num" id="statLate">0</div><div class="stat-foot" style="color:var(--amber)">Review punctuality</div></div>
+    <div class="card"><div class="stat-label">Not checked in</div><div class="stat-num" id="statMissing">0</div><div class="stat-foot">Based on active users</div></div>
+    <div class="card"><div class="stat-label">Attendance rate</div><div class="stat-num" id="statRate">0%</div><div class="stat-foot">Today's workforce</div></div>
+  </div>
+  <div class="grid two">
+    <div class="card"><h3>Quick attendance</h3><div class="attendance-actions">
+      <button class="action" data-method="Face recognition"><span class="ico">▣</span><strong>Face sign-in</strong><span>Use your device camera</span></button>
+      <button class="action" data-method="QR code"><span class="ico">▦</span><strong>QR sign-in</strong><span>Scan workplace QR code</span></button>
+    </div><div id="dashNotice" class="notice info">Choose a method to start attendance. Location permission may be required.</div></div>
+    <div class="card"><h3>Attendance trend</h3><div class="chart" id="miniChart"></div><div class="muted small" style="margin-top:12px">Illustrative weekly view based on records stored in this demo.</div></div>
+  </div>
+  <div class="card" style="margin-top:16px"><h3>Recent activity</h3><div class="tablewrap"><table><thead><tr><th>Employee</th><th>Time</th><th>Method</th><th>Status</th></tr></thead><tbody id="recentRows"></tbody></table></div></div>
+</section>
+<section class="page" id="page-attendance">
+  <div class="welcome"><div><h3>My Attendance</h3><div class="muted">Record your arrival and departure securely.</div></div><span class="pill pending" id="todayState">Not checked in</span></div>
+  <div class="grid two">
+    <div class="card"><h3>Record attendance</h3><p class="muted">Select an approved method. Your attendance is saved with a timestamp and method.</p><div class="attendance-actions">
+      <button class="action" data-method="Face recognition"><span class="ico">▣</span><strong>Face sign-in</strong><span>Camera-assisted capture</span></button>
+      <button class="action" data-method="QR code"><span class="ico">▦</span><strong>QR sign-in</strong><span>Scan a valid company QR</span></button>
+    </div><div id="attendanceNotice" class="notice info">Workplace geofence is required for location-based attendance.</div></div>
+    <div class="card"><h3>Today's summary</h3><div class="barlist" id="mySummary"></div></div>
+  </div>
+  <div class="card" style="margin-top:16px"><h3>My recent records</h3><div class="tablewrap"><table><thead><tr><th>Date</th><th>Check-in</th><th>Check-out</th><th>Method</th><th>Status</th></tr></thead><tbody id="myRows"></tbody></table></div></div>
+</section>
+<section class="page" id="page-records">
+  <div class="welcome"><div><h3>Attendance Records</h3><div class="muted">Review and filter company attendance.</div></div><button id="exportCsv">Export Excel-compatible CSV</button></div>
+  <div class="toolbar"><input id="recordSearch" placeholder="Search employee or ID…"><input id="recordDate" type="date"><select id="recordStatus"><option value="">All statuses</option><option>Present</option><option>Late</option></select><button class="ghost" id="clearFilters">Clear filters</button></div>
+  <div class="card"><div class="tablewrap"><table><thead><tr><th>Employee</th><th>Employee ID</th><th>Date</th><th>Check-in</th><th>Check-out</th><th>Method</th><th>Status</th></tr></thead><tbody id="recordRows"></tbody></table></div></div>
+</section>
+<section class="page" id="page-analytics">
+  <div class="welcome"><div><h3>Analytics & Reports</h3><div class="muted">Monitor attendance patterns and export management reports.</div></div><div class="toolbar" style="margin:0"><button id="exportCsv2">Export CSV</button><button class="secondary" id="printPdf">Print / Save PDF</button></div></div>
+  <div class="grid stats">
+    <div class="card"><div class="stat-label">Total employees</div><div class="stat-num" id="aEmployees">0</div></div>
+    <div class="card"><div class="stat-label">On-time arrivals</div><div class="stat-num" id="aOnTime">0</div></div>
+    <div class="card"><div class="stat-label">Late arrivals</div><div class="stat-num" id="aLate">0</div></div>
+    <div class="card"><div class="stat-label">Recorded check-outs</div><div class="stat-num" id="aOut">0</div></div>
+  </div>
+  <div class="grid two"><div class="card"><h3>Attendance by status</h3><div class="chart" id="statusChart"></div></div><div class="card"><h3>Attendance by method</h3><div class="barlist" id="methodBars"></div></div></div>
+  <div class="card" style="margin-top:16px"><h3>Report preview</h3><div class="tablewrap"><table><thead><tr><th>Employee</th><th>Date</th><th>Check-in</th><th>Check-out</th><th>Method</th><th>Status</th></tr></thead><tbody id="reportRows"></tbody></table></div></div>
+</section>
+<section class="page" id="page-users">
+  <div class="welcome"><div><h3>User Management</h3><div class="muted">Manage roles and access. Password resets are admin-controlled.</div></div><button id="addUserBtn">＋ Add employee</button></div>
+  <div class="notice warn">Security note: this browser prototype stores demo data locally. Production use requires a secure server, password hashing, audit logs, and access controls.</div>
+  <div class="card"><div class="tablewrap"><table><thead><tr><th>Name</th><th>Employee ID</th><th>Email</th><th>Role</th><th>Access</th><th>Actions</th></tr></thead><tbody id="userRows"></tbody></table></div></div>
+  <div class="card" style="margin-top:16px"><h3>Admin password recovery</h3><p class="muted">Only an administrator can initiate a reset. In production, send a one-time reset link and record the action in an immutable audit log. Never display or retrieve an existing password.</p><div class="toolbar"><select id="resetUser"></select><button id="resetBtn">Issue demo reset</button></div><div id="resetNotice" class="small muted">No reset initiated.</div></div>
+</section>
+<section class="page" id="page-settings">
+  <div class="welcome"><div><h3>Workplace Settings</h3><div class="muted">Set your workplace location and attendance rules.</div></div><button id="saveSettings">Save settings</button></div>
+  <div class="grid two"><div class="card"><h3>Geofence configuration</h3><div class="field"><label>Workplace name</label><input id="workName" value="MADA Multi-Links Head Office"></div><div class="field"><label>Latitude</label><input id="workLat" type="number" step="any" placeholder="e.g. 9.0579"></div><div class="field"><label>Longitude</label><input id="workLon" type="number" step="any" placeholder="e.g. 7.4951"></div><div class="field"><label>Allowed radius (metres)</label><input id="workRadius" type="number" min="20" max="2000" value="150"></div><div class="notice warn">Enter your actual workplace coordinates before enabling GPS attendance. Demo defaults are not a verified company location.</div></div>
+  <div class="card"><h3>Attendance policy</h3><div class="field"><label>Workday start</label><input id="startTime" type="time" value="09:00"></div><div class="field"><label>Late grace period (minutes)</label><input id="grace" type="number" min="0" max="120" value="10"></div><div class="field"><label>Company QR token</label><input id="qrToken" value="MADA-SMARTTIME-DEMO"></div><div class="notice info">For production, rotate QR tokens frequently and sign them server-side to prevent screenshots or copied codes from being reused.</div></div></div>
+</section>
+</div>
+</main>
+</div>
+
+<div class="modalback" id="loginModal"><div class="modal"><div class="brand" style="padding:0;margin-bottom:18px"><div class="logo">ST</div><div><h1 style="color:var(--ink)">SmartTime</h1><small style="color:var(--muted)">MADA MULTI-LINKS CO LTD</small></div></div><h2 style="margin:0 0 6px">Sign in to SmartTime</h2><p class="muted">Administrator access only. Staff attendance is available on the SmartTime home page.</p><div class="field"><label>Sign-in mode</label><select id="entryMode"><option value="admin">IT administrator console</option></select></div><div id="adminLoginFields"><div class="field"><label>Demo account</label><select id="loginUser"><option value="admin">Admin User · Administrator</option></select></div><div class="field"><label>Password</label><input id="loginPass" type="password" value="demo123" placeholder="Enter password"></div></div><div id="loginError" class="notice error" style="display:none">Please enter the demo password: demo123</div><button id="loginBtn" style="width:100%" disabled>Connecting to database…</button><p class="muted small" id="loginHint">Use the administrator account to access monitoring and management tools.</p></div></div>
+
+<div class="modalback" id="actionModal"><div class="modal"><div class="modalhead"><h3 id="actionTitle">Attendance verification</h3><button class="ghost" id="closeAction">✕</button></div><div id="actionBody"></div></div></div>
+<div class="modalback" id="userModal"><div class="modal"><div class="modalhead"><h3>Add employee</h3><button class="ghost" id="closeUser">✕</button></div><div class="field"><label>Full name</label><input id="newName" placeholder="Employee full name"></div><div class="field"><label>Employee ID</label><input id="newId" placeholder="e.g. MADA-004"></div><div class="field"><label>Email</label><input id="newEmail" type="email" placeholder="name@company.com"></div><div class="field"><label>Role</label><select id="newRole"><option>Employee</option><option>Manager</option><option>Administrator</option></select></div><button id="createUser">Create demo user</button></div></div>
+
+<script>
+const $=id=>document.getElementById(id);
+const today=()=>new Date().toISOString().slice(0,10);
+const timeNow=()=>new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit',hour12:false});
+const dateLabel=d=>new Date(d+'T12:00:00').toLocaleDateString(undefined,{day:'2-digit',month:'short',year:'numeric'});
+const initials=n=>n.split(/\s+/).map(x=>x[0]).slice(0,2).join('').toUpperCase();
+const defaults={
+ users:[
+ {id:'admin',empId:'MADA-001',name:'Admin User',email:'admin@mada.example',role:'Administrator',active:true},
+ {id:'staff1',empId:'MADA-002',name:'Amina Yusuf',email:'amina@mada.example',role:'Employee',active:true},
+ {id:'staff2',empId:'MADA-003',name:'Musa Bello',email:'musa@mada.example',role:'Employee',active:true},
+ {id:'manager',empId:'MADA-004',name:'Team Manager',email:'manager@mada.example',role:'Manager',active:true}],
+ records:[],settings:{workName:'MADA Multi-Links Head Office',lat:'',lon:'',radius:150,start:'09:00',grace:10,qr:'MADA-SMARTTIME-DEMO'}
+};
+let db=structuredClone(defaults),current=null,stream=null,dbReady=false;
+async function loadDb(){try{const r=await fetch('/api/db');if(!r.ok)throw new Error('HTTP '+r.status);const d=await r.json();if(!d.users||!d.settings)throw new Error('Invalid database response');db=d;dbReady=true;$('loginBtn').disabled=false;$('loginHint').textContent='SQLite database connected. Use the administrator account to access monitoring and management tools.'}catch(e){$('loginBtn').disabled=true;$('loginHint').textContent='SQLite server unavailable. Start server.py and reload this page.';}}
+async function saveDb(){try{const r=await fetch('/api/db',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(db)});if(!r.ok)throw new Error('HTTP '+r.status)}catch(e){alert('Could not save to SQLite. Check that the SmartTime server is running, then retry.')}}
+function todayRecords(){return db.records.filter(r=>r.date===today())}
+function isAdmin(){return current&&current.role==='Administrator'}
+function canManage(){return current&&current.role==='Administrator'}
+function setNotice(id,msg,type='info'){const el=$(id);el.className='notice '+type;el.textContent=msg;el.style.display='block'}
+function showModal(id){$(id).classList.add('open')}function hideModal(id){$(id).classList.remove('open')}
+function activateUser(user, landing){
+ current=user;document.body.classList.add('authenticated');$('loginModal').classList.remove('open');$('displayName').textContent=current.name;$('displayRole').textContent=current.role;$('avatar').textContent=initials(current.name);
+ document.querySelectorAll('.admin-only').forEach(el=>el.style.display=current.role==='Administrator'?'block':'none');
+ $('hello').textContent=`Hello, ${current.name.split(' ')[0]} 👋`;
+ $('todayLine').textContent=new Date().toLocaleDateString(undefined,{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+ renderAll();goPage(landing);
+}
+async function login(){
+ try{const response=await fetch('/api/db');if(!response.ok)throw new Error('Database unavailable');db=await response.json()}catch(e){$('loginError').textContent='SQLite server unavailable. Start server.py and retry.';$('loginError').style.display='block';return}
+ const user=db.users.find(u=>u.id===$('loginUser').value);
+ if(!user||user.role!=='Administrator'){ $('loginError').textContent='Only an administrator can open the IT console.';$('loginError').style.display='block';return}
+ if($('loginPass').value!=='demo123'){ $('loginError').style.display='block';return}
+ activateUser(user,'dashboard');
+}
+async function staffContinue(){
+ try{const response=await fetch('/api/db');if(!response.ok)throw new Error('Database unavailable');db=await response.json()}catch(e){setNotice('staffLoginNotice','SQLite server unavailable. Start server.py and retry.','error');return}
+ const id=$('staffIdInput').value.trim().toLowerCase();
+ const user=db.users.find(u=>u.empId.toLowerCase()===id&&u.active);
+ if(!user||user.role==='Administrator'){setNotice('staffLoginNotice','Employee ID not found, disabled, or not eligible for staff sign-in.','error');return}
+ if(!String(db.settings?.lat??'').trim()||!String(db.settings?.lon??'').trim()||!Number.isFinite(Number(db.settings.lat))||!Number.isFinite(Number(db.settings.lon))||Math.abs(Number(db.settings.lat))>90||Math.abs(Number(db.settings.lon))>180){setNotice('staffLoginNotice','Access blocked: workplace coordinates are missing or invalid. Ask IT to save valid coordinates.','error');return}
+ if(!navigator.geolocation){setNotice('staffLoginNotice','Access blocked: this browser cannot verify workplace location.','error');return}
+ setNotice('staffLoginNotice','Checking workplace location…','info');
+ navigator.geolocation.getCurrentPosition(pos=>{
+   const accuracy=Number(pos.coords.accuracy)||0;
+   const dist=haversine(pos.coords.latitude,pos.coords.longitude,Number(db.settings.lat),Number(db.settings.lon));
+   const radius=Number(db.settings.radius);
+   if(accuracy>Math.max(radius,150)){setNotice('staffLoginNotice',`GPS accuracy is too low (±${Math.round(accuracy)} m). Enable precise location/GPS and retry.`, 'warn');return}
+   if(dist-accuracy>radius){setNotice('staffLoginNotice',`Outside workplace area: estimated ${Math.round(dist)} m away (GPS uncertainty ±${Math.round(accuracy)} m); allowed ${Math.round(radius)} m. Move closer or retry.`, 'error');return}
+   activateUser(user,'staff');$('staffStepId').style.display='none';$('staffStepMethods').style.display='block';
+   $('staffWelcome').textContent=`Hello, ${user.name}. Location verified. Choose an attendance method.`;
+   setNotice('staffMethodNotice',`Workplace verified: estimated ${Math.round(dist)} m away (GPS accuracy ±${Math.round(accuracy)} m).`,'ok');
+ },err=>setNotice('staffLoginNotice',err.code===1?'Location permission denied. Allow precise location for this site.':err.code===2?'Device location unavailable. Turn on GPS/location services and retry.':'Location lookup timed out. Move to an area with better GPS reception and retry.','error'),{enableHighAccuracy:true,timeout:30000,maximumAge:0});
+}
+function logout(){current=null;stopCamera();document.body.classList.remove('authenticated');document.querySelectorAll('.modalback').forEach(m=>m.classList.remove('open'));showModal('loginModal');$('loginPass').value='';$('loginError').style.display='none';document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'))}
+function goPage(p){if(!current)return; if(['dashboard','attendance','records','analytics','users','settings'].includes(p)&&!canManage()){p='dashboard';setNotice('dashNotice','This area is restricted to managers and administrators.','error')}
+ document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));$('page-'+p).classList.add('active');document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===p));$('pageTitle').textContent=({staff:'Staff Attendance',dashboard:'IT Dashboard',attendance:'Attendance Tools',records:'Attendance Records',analytics:'Analytics & Reports',users:'User Management',settings:'Workplace Settings'})[p];if(p==='settings')loadSettings();renderAll()}
+function getRecord(userId,date=today()){return db.records.find(r=>r.userId===userId&&r.date===date)}
+function attendanceStatus(t){const [h,m]=db.settings.start.split(':').map(Number),[th,tm]=t.split(':').map(Number);return th*60+tm>h*60+m+Number(db.settings.grace)?'Late':'Present'}
+function addAttendance(method,verified='Demo verification'){
+ const existing=getRecord(current.id);const now=timeNow();
+ if(!existing){const r={userId:current.id,employee:current.name,empId:current.empId,date:today(),checkIn:now,checkOut:'',method,status:attendanceStatus(now),verified};db.records.unshift(r);saveDb();hideModal('actionModal');renderAll();setNotice('attendanceNotice',`Check-in recorded at ${now} via ${method}. ${verified}.`,'ok');setNotice('dashNotice',`Check-in recorded at ${now}.`,'ok')}
+ else if(!existing.checkOut){existing.checkOut=now;saveDb();hideModal('actionModal');renderAll();setNotice('attendanceNotice',`Check-out recorded at ${now}.`,'ok');setNotice('dashNotice',`Check-out recorded at ${now}.`,'ok')}
+ else {hideModal('actionModal');setNotice('attendanceNotice','You have already checked in and out today.','warn')}
+}
+function haversine(lat1,lon1,lat2,lon2){const R=6371000,toRad=x=>x*Math.PI/180;const dLat=toRad(lat2-lat1),dLon=toRad(lon2-lon1);const a=Math.sin(dLat/2)**2+Math.cos(toRad(lat1))*Math.cos(toRad(lat2))*Math.sin(dLon/2)**2;return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a))}
+function startAction(method){
+ if(!current)return;
+ $('actionTitle').textContent=method+' verification';
+ const body=$('actionBody');body.innerHTML='';
+ if(getRecord(current.id)?.checkOut){body.innerHTML='<div class="notice warn">You have completed attendance for today.</div>';showModal('actionModal');return}
+ if(method==='GPS'){
+  body.innerHTML='<p class="muted">SmartTime checks your current device location against the configured workplace radius. Allow location access when prompted.</p><div id="gpsMsg" class="notice info">Waiting for location permission…</div><button id="gpsGo">Verify location & record attendance</button>';
+  $('gpsGo').onclick=()=>{if(!navigator.geolocation){setNotice('gpsMsg','Geolocation is not supported by this browser.','error');return}if(db.settings.lat===''||db.settings.lon===''){setNotice('gpsMsg','Admin must configure workplace latitude and longitude first. GPS attendance is blocked.','error');return}
+   $('gpsGo').disabled=true;$('gpsGo').textContent='Checking location…';
+   navigator.geolocation.getCurrentPosition(pos=>{const accuracy=Number(pos.coords.accuracy)||0,dist=haversine(pos.coords.latitude,pos.coords.longitude,Number(db.settings.lat),Number(db.settings.lon)),radius=Number(db.settings.radius);if(accuracy>Math.max(radius,150)){setNotice('gpsMsg',`GPS accuracy is too low (±${Math.round(accuracy)} m). Enable precise location and retry.`,'warn');$('gpsGo').disabled=false;$('gpsGo').textContent='Try again';return}if(dist-accuracy<=radius){setNotice('gpsMsg',`Location verified (estimated ${Math.round(dist)} m away; GPS accuracy ±${Math.round(accuracy)} m).`,'ok');addAttendance('GPS',`Geofence verified · ${Math.round(dist)} m ±${Math.round(accuracy)} m`)}else{setNotice('gpsMsg',`Outside workplace geofence (estimated ${Math.round(dist)} m away; GPS accuracy ±${Math.round(accuracy)} m; allowed ${radius} m).`,'error');$('gpsGo').disabled=false;$('gpsGo').textContent='Try again'}},err=>{setNotice('gpsMsg','Unable to verify location. Enable location permission and try again.','error');$('gpsGo').disabled=false;$('gpsGo').textContent='Try again'},{enableHighAccuracy:true,timeout:30000,maximumAge:0})};
+ } else if(method==='QR code'){
+  body.innerHTML='<p class="muted">Scan the company QR code. For this prototype, you can enter the demo QR token shown in Workplace Settings.</p><div class="field"><label>QR code content / token</label><input id="qrInput" placeholder="Scan or enter QR token"></div><div id="qrMsg" class="notice info">A valid company token is required.</div><button id="qrGo">Verify QR & record attendance</button>';
+  $('qrGo').onclick=()=>{if($('qrInput').value.trim()===db.settings.qr){addAttendance('QR code','QR token verified')}else setNotice('qrMsg','Invalid QR token. Ask your administrator for the current workplace QR code.','error')};
+ } else if(method==='Fingerprint'){
+  body.innerHTML='<p class="muted">Fingerprint attendance requires a compatible fingerprint reader and a secure biometric service.</p><div class="notice warn">Fingerprint verification is not available in this browser demo. This action is clearly labelled as demo-only.</div><button id="fingerprintDemo">Continue with demo mode</button>';
+  $('fingerprintDemo').onclick=()=>addAttendance('Fingerprint demo','Fingerprint not verified · demo only');
+ } else {
+  body.innerHTML='<p class="muted">Camera preview can help capture a face image, but this demo does not perform biometric identity matching. Production face recognition requires a secure biometric service, consent, liveness checks and a fallback sign-in method.</p><video class="video" id="faceVideo" autoplay playsinline></video><div id="faceMsg" class="notice info">Start camera to continue. Camera access is optional and stays in this browser.</div><div class="toolbar"><button id="camStart">Start camera</button><button class="secondary" id="faceCapture" disabled>Capture & continue demo</button></div>';
+  $('camStart').onclick=async()=>{try{stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'user'},audio:false});$('faceVideo').srcObject=stream;$('faceCapture').disabled=false;setNotice('faceMsg','Camera ready. This is capture only, not verified face recognition.','warn')}catch(e){setNotice('faceMsg','Camera unavailable or permission denied. Try QR or GPS sign-in.','error')}};
+  $('faceCapture').onclick=()=>addAttendance('Face capture demo','Camera capture only · identity not verified');
+ }
+ showModal('actionModal');
+}
+function stopCamera(){if(stream){stream.getTracks().forEach(t=>t.stop());stream=null}}
+function statusPill(s){return `<span class="pill ${s.toLowerCase()}">${s}</span>`}
+function renderAll(){if(!current)return;renderDashboard();renderMine();if(canManage()){renderRecords();renderAnalytics();renderUsers()}}
+function renderDashboard(){
+ const rs=todayRecords(),active=db.users.filter(u=>u.active);$('statPresent').textContent=rs.length;$('statLate').textContent=rs.filter(r=>r.status==='Late').length;$('statMissing').textContent=Math.max(0,active.length-rs.length);$('statRate').textContent=(active.length?Math.round(rs.length/active.length*100):0)+'%';
+ const recent=[...db.records].slice(0,5);$('recentRows').innerHTML=recent.length?recent.map(r=>`<tr><td>${esc(r.employee)}</td><td>${r.checkIn}</td><td>${esc(r.method)}</td><td>${statusPill(r.status)}</td></tr>`).join(''):'<tr><td colspan="4" class="empty">No attendance records yet. Start with a check-in.</td></tr>';
+ const values=[0,0,0,0,0,0,0];db.records.forEach(r=>{const delta=Math.floor((new Date(today())-new Date(r.date))/86400000);if(delta>=0&&delta<7)values[6-delta]++});$('miniChart').innerHTML=values.map((v,i)=>`<div class="chartcol"><b>${v}</b><i style="height:${Math.max(5,v/(Math.max(1,...values))*115)}px"></i><span>${['M','T','W','T','F','S','S'][i]}</span></div>`).join('');
+}
+function renderMine(){
+ const rs=db.records.filter(r=>r.userId===current.id).slice(0,12),todayRec=getRecord(current.id);$('todayState').textContent=!todayRec?'Not checked in':todayRec.checkOut?'Completed':'Checked in';$('todayState').className='pill '+(!todayRec?'pending':todayRec.status.toLowerCase());
+ $('mySummary').innerHTML=[['Check-in',todayRec?.checkIn||'—'],['Check-out',todayRec?.checkOut||'—'],['Method',todayRec?.method||'—'],['Status',todayRec?.status||'Not recorded']].map(([a,b])=>`<div class="barrow" style="grid-template-columns:90px 1fr"><span>${a}</span><strong>${esc(String(b))}</strong></div>`).join('');
+ $('myRows').innerHTML=rs.length?rs.map(r=>`<tr><td>${dateLabel(r.date)}</td><td>${r.checkIn||'—'}</td><td>${r.checkOut||'—'}</td><td>${esc(r.method)}</td><td>${statusPill(r.status)}</td></tr>`).join(''):'<tr><td colspan="5" class="empty">No records yet.</td></tr>';
+}
+function filteredRecords(){let rs=[...db.records];const q=($('recordSearch')?.value||'').toLowerCase(),d=$('recordDate')?.value||'',s=$('recordStatus')?.value||'';return rs.filter(r=>(!q||r.employee.toLowerCase().includes(q)||r.empId.toLowerCase().includes(q))&&(!d||r.date===d)&&(!s||r.status===s))}
+function renderRecords(){const rs=filteredRecords();$('recordRows').innerHTML=rs.length?rs.map(r=>`<tr><td>${esc(r.employee)}</td><td>${esc(r.empId)}</td><td>${dateLabel(r.date)}</td><td>${r.checkIn}</td><td>${r.checkOut||'—'}</td><td>${esc(r.method)}</td><td>${statusPill(r.status)}</td></tr>`).join(''):'<tr><td colspan="7" class="empty">No records match these filters.</td></tr>'}
+function renderAnalytics(){
+ const rs=db.records,prs=rs.filter(r=>r.status==='Present').length,lates=rs.filter(r=>r.status==='Late').length,outs=rs.filter(r=>r.checkOut).length;
+ $('aEmployees').textContent=db.users.filter(u=>u.active).length;$('aOnTime').textContent=prs;$('aLate').textContent=lates;$('aOut').textContent=outs;
+ const max=Math.max(1,prs,lates);$('statusChart').innerHTML=[['Present',prs],['Late',lates],['No record',Math.max(0,db.users.length-todayRecords().length)]].map(([label,v])=>`<div class="chartcol"><b>${v}</b><i style="height:${Math.max(5,v/max*120)}px"></i><span>${label}</span></div>`).join('');
+ const methods=['Face recognition','Face capture demo','QR code','GPS'];$('methodBars').innerHTML=methods.map(m=>{const n=rs.filter(r=>r.method===m).length;return `<div class="barrow"><span>${m==='Face capture demo'?'Face capture':m}</span><div class="bar"><i style="width:${rs.length?n/rs.length*100:0}%"></i></div><b>${n}</b></div>`}).join('');
+ $('reportRows').innerHTML=rs.length?rs.slice(0,100).map(r=>`<tr><td>${esc(r.employee)}</td><td>${dateLabel(r.date)}</td><td>${r.checkIn}</td><td>${r.checkOut||'—'}</td><td>${esc(r.method)}</td><td>${r.status}</td></tr>`).join(''):'<tr><td colspan="6" class="empty">No attendance records available to report.</td></tr>';
+}
+function renderUsers(){
+ $('userRows').innerHTML=db.users.map(u=>`<tr><td>${esc(u.name)}</td><td>${esc(u.empId)}</td><td>${esc(u.email)}</td><td><span class="pill pending">${u.role}</span></td><td>${u.active?'Active':'Disabled'}</td><td>${u.id===current.id?'<span class="muted small">Current user</span>':`<button class="ghost" data-role="${u.id}">Change role</button> <button class="danger" data-disable="${u.id}">${u.active?'Disable':'Enable'}</button>`}</td></tr>`).join('');
+ $('resetUser').innerHTML=db.users.filter(u=>u.id!==current.id).map(u=>`<option value="${u.id}">${esc(u.name)} (${esc(u.empId)})</option>`).join('');
+ document.querySelectorAll('[data-role]').forEach(b=>b.onclick=()=>{const u=db.users.find(x=>x.id===b.dataset.role);const roles=['Employee','Manager','Administrator'];u.role=roles[(roles.indexOf(u.role)+1)%roles.length];saveDb();renderUsers();setNotice('resetNotice',`Role updated for ${u.name}.`,'ok')});
+ document.querySelectorAll('[data-disable]').forEach(b=>b.onclick=()=>{const u=db.users.find(x=>x.id===b.dataset.disable);u.active=!u.active;saveDb();renderUsers()});
+}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function exportCsv(){const rs=canManage()?[...db.records]:db.records.filter(r=>r.userId===current.id);const rows=[['Employee','Employee ID','Date','Check-in','Check-out','Method','Status','Verification'],...rs.map(r=>[r.employee,r.empId,r.date,r.checkIn,r.checkOut,r.method,r.status,r.verified])];const csv=rows.map(row=>row.map(x=>'"'+String(x??'').replace(/"/g,'""')+'"').join(',')).join('\r\n');const blob=new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8;'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`SmartTime_Attendance_${today()}.csv`;a.click();URL.revokeObjectURL(a.href)}
+function loadSettings(){const s=db.settings;$('workName').value=s.workName;$('workLat').value=s.lat;$('workLon').value=s.lon;$('workRadius').value=s.radius;$('startTime').value=s.start;$('grace').value=s.grace;$('qrToken').value=s.qr}
+function saveSettings(){
+ const latText=$('workLat').value.trim(),lonText=$('workLon').value.trim(),lat=Number(latText),lon=Number(lonText),radius=Number($('workRadius').value);
+ if(!latText||!lonText||!Number.isFinite(lat)||!Number.isFinite(lon)||Math.abs(lat)>90||Math.abs(lon)>180){alert('Enter valid workplace coordinates: latitude from -90 to 90 and longitude from -180 to 180.');return}
+ if(!Number.isFinite(radius)||radius<1||radius>20000){alert('Allowed radius must be between 1 and 20,000 metres.');return}
+ db.settings={...db.settings,workName:$('workName').value.trim()||'Workplace',lat:String(lat),lon:String(lon),radius,start:$('startTime').value||'09:00',grace:Math.max(0,Number($('grace').value)||0),qr:$('qrToken').value.trim()||'MADA-SMARTTIME-DEMO'};
+ saveDb();setNotice('dashNotice',`Workplace geofence saved: ${lat}, ${lon} · ${radius} m radius. Open staff home on the same site to use these settings.`,'ok');alert('Workplace settings saved. Make sure index.html and admin.html are opened from the same HTTPS/localhost site so they share settings.');
+}
+$('loginBtn').onclick=login;$('logoutBtn').onclick=logout;
+$('adminLoginFields').style.display='block';$('entryMode').onchange=()=>{$('adminLoginFields').style.display='block';$('loginError').style.display='none'};
+$('staffContinue').onclick=staffContinue;$('staffIdInput').onkeydown=e=>{if(e.key==='Enter')staffContinue()};
+$('staffBack').onclick=()=>{current=null;$('staffStepMethods').style.display='none';$('staffStepId').style.display='block';showModal('loginModal')};$('quickCheckin').onclick=()=>goPage('attendance');$('nav').querySelectorAll('button').forEach(b=>b.onclick=()=>goPage(b.dataset.page));
+document.querySelectorAll('[data-method]').forEach(b=>b.onclick=()=>startAction(b.dataset.method));
+$('closeAction').onclick=()=>{stopCamera();hideModal('actionModal')};$('actionModal').addEventListener('click',e=>{if(e.target===$('actionModal')){stopCamera();hideModal('actionModal')}});
+$('exportCsv').onclick=exportCsv;$('exportCsv2').onclick=exportCsv;$('printPdf').onclick=()=>window.print();$('recordSearch').oninput=renderRecords;$('recordDate').onchange=renderRecords;$('recordStatus').onchange=renderRecords;$('clearFilters').onclick=()=>{$('recordSearch').value='';$('recordDate').value='';$('recordStatus').value='';renderRecords()};
+$('saveSettings').onclick=saveSettings;$('addUserBtn').onclick=()=>showModal('userModal');$('closeUser').onclick=()=>hideModal('userModal');
+$('createUser').onclick=()=>{const name=$('newName').value.trim(),empId=$('newId').value.trim(),email=$('newEmail').value.trim();if(!name||!empId||!email){alert('Please complete name, employee ID and email.');return}if(db.users.some(u=>u.empId===empId)){alert('Employee ID already exists.');return}db.users.push({id:'u'+Date.now(),empId,name,email,role:$('newRole').value,active:true});saveDb();hideModal('userModal');$('newName').value=$('newId').value=$('newEmail').value='';renderAll()};
+$('resetBtn').onclick=()=>{const u=db.users.find(x=>x.id===$('resetUser').value);if(!u)return;const code=Math.random().toString(36).slice(2,10).toUpperCase();$('resetNotice').textContent=`Demo reset initiated for ${u.name}. Temporary code: ${code}. In production, deliver a one-time reset link through a verified channel and audit the action.`;$('resetNotice').className='notice warn'};
+function closeMobileNav(){$('sidebar').classList.remove('open');$('sidebarBackdrop').classList.remove('open');$('menuBtn').setAttribute('aria-expanded','false')}
+$('menuBtn').setAttribute('aria-label','Open navigation');$('menuBtn').setAttribute('aria-expanded','false');$('menuBtn').onclick=()=>{const open=!$('sidebar').classList.contains('open');$('sidebar').classList.toggle('open',open);$('sidebarBackdrop').classList.toggle('open',open);$('menuBtn').setAttribute('aria-expanded',String(open))};$('sidebarBackdrop').onclick=closeMobileNav;$('nav').querySelectorAll('button').forEach(b=>b.addEventListener('click',closeMobileNav));window.addEventListener('resize',()=>{if(window.innerWidth>950)closeMobileNav()});
+window.addEventListener('beforeunload',stopCamera);
+showModal('loginModal');
+loadDb();
+</script>
+<style>
+@media print{.sidebar,.topbar button,.toolbar button,.welcome button,.nav,.modalback{display:none!important}.shell{display:block}.content{padding:0;max-width:none}.page{display:none!important}#page-analytics{display:block!important}.card{box-shadow:none;break-inside:avoid}body{background:white}.grid.stats{grid-template-columns:repeat(4,1fr)}}
+</style>
+</body>
+</html>
